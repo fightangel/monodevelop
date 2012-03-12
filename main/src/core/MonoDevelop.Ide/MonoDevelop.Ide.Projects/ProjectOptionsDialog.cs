@@ -66,7 +66,13 @@ namespace MonoDevelop.Ide.Projects
 			// can result in the filesystem being probed for a file with that name.
 			if (!RenameItemFile (oldFile, newFile))
 				return;
-
+			
+			// remove .userprefs and .pidb files
+			if (item is WorkspaceItem)
+				FileService.DeleteFile (item.FileName.ChangeExtension(".userprefs"));
+			if (item is Project)
+				FileService.DeleteFile (item.FileName.ChangeExtension (".pidb"));
+				
 			try {
 				item.Name = newName;
 				item.NeedsReload = false;
